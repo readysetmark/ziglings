@@ -9,12 +9,17 @@ const std = @import("std");
 
 const NumError = error{IllegalNumber};
 
-pub fn main() void {
+pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
 
-    const my_num: u32 = getNumber();
+    const my_num: NumError!u32 = getNumber();
 
-    try stdout.print("my_num={}\n", .{my_num});
+    if (my_num) |value| {
+        try stdout.print("my_num={}\n", .{value});
+    }
+    else |_| {
+        unreachable;
+    }
 }
 
 // Just don't modify this function. It's "perfect" the way it is. :-)
